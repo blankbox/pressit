@@ -1,0 +1,44 @@
+{
+  "name": "core",
+  "load": [
+    "first",
+    "third"
+  ],
+  "menuItems": [
+    {
+      "menu": [
+        "main",
+        "footer"
+      ],
+      "item": {
+        "name": "core",
+        "display": "CORE",
+        "state": "core",
+        "theme": "primary"
+      }
+    }
+  ],
+  "bower": [
+    {
+      "name": "bootstrap",
+      "package": "bootstrap",
+      "version": "1.11.1"
+    },
+    {
+      "name": "jquery-legacy",
+      "package": "jquery",
+      "version": "1.11.1"
+    },
+    {
+      "name": "jquery",
+      "package": "jquery",
+      "version": "3.1.0"
+    }
+  ],
+  "cdns": [
+    {
+      "name": "aws",
+      "route": "//:somepath/here/"
+    }
+  ]
+}

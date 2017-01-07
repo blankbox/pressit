@@ -1,0 +1,40 @@
+body {
+  max-width: 80em;
+  margin-left: auto;
+  margin-right: auto;
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+body:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+
+aside {
+  background: red;
+  position: absolute;
+  float: left;
+  width: 170px;
+  top: 0px;
+  bottom: 0px;
+  height: 100%;
+}
+
+header {
+  margin-left: 170px;
+  width: 100%;
+}
+
+nav {
+  width: 25%;
+  float: left;
+  margin-right: 5.26316%;
+}
+
+.test {
+  border: 1px solid green;
+}

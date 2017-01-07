@@ -1,0 +1,25 @@
+{
+  "name": "second",
+  "menuItems": [
+    {
+      "menu": ["main"],
+      "item": {
+        "display": "second",
+        "state": "core.first.second",
+        "theme": "primary"
+      }
+    }
+    ],
+    "bower": [
+      {
+        "name": "bootstrap",
+        "package": "bootstrap",
+        "version": "1.11.1"
+      },
+      {
+        "name": "jquery-legacy",
+        "package": "jquery",
+        "version": "1.11.1"
+      }
+    ]
+}

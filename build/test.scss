@@ -1,0 +1,37 @@
+@import "susy";
+
+
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #333;
+
+$aside-menu-width: 170px;
+
+body {
+  @include container(80em);
+  font: 100% $font-stack;
+  color: $primary-color;
+  margin: 0;
+  padding: 0;
+}
+
+aside {
+  background: red;
+
+  position: absolute;
+  float:left;
+  width:$aside-menu-width;
+  top: 0px;
+  bottom: 0px;
+  height: 100%;
+}
+
+header {
+  margin-left: $aside-menu-width;
+  width: 100%;
+}
+
+nav { @include span(25%); }
+
+.test {
+  border: 1px solid green;
+}

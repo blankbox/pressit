@@ -1,0 +1,21 @@
+{
+  "name": "third",
+  "menuItems": [
+    {
+      "menu": ["main"],
+      "item": {
+        "display": "third",
+        "state": "core.third",
+        "theme": "primary"
+      }
+    }
+  ],
+  "bower": [
+    {
+      "name": "jquery",
+      "package": "jquery",
+      "version": "3.1.0"
+    }
+
+  ]
+}

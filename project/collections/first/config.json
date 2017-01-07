@@ -1,0 +1,16 @@
+{
+  "name": "first",
+  "load": [
+    "second"
+  ],
+  "menuItems": [
+    {
+      "menu": ["main", "footer"],
+      "item" : {
+        "display": "first",
+        "state": "core.first",
+        "theme": "primary"
+      }
+    }
+  ]
+}
