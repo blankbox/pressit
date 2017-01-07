@@ -4,7 +4,8 @@
     "cluster/",
     "terra.js",
     "lib",
-    "project"
+    "project",
+    "app"
   ],
   "execMap": {
     "rb": "ruby",
