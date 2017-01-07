@@ -23,7 +23,7 @@ module.exports = function (core, data, utils, config) {
 plugin.prototype.details = function () {
 
   this.plugin = {
-    name: 'Core Menu Plugin'
+    name: 'Core Menu Plugin',
     name_space: 'menus'
   }
 
