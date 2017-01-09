@@ -30,7 +30,7 @@ plugin.prototype.details = function () {
 }
 
 plugin.prototype.init = function () {
-  console.log('init happend in plugin');
+  console.log('init menus plugin');
 
   var patterns = this.utils.handler(__dirname + '/patterns', {});
 
@@ -47,6 +47,8 @@ plugin.prototype.init = function () {
 
 plugin.prototype.addScripts = function (req, res) {
 
+  console.log('addScripts from menus plugin')
+
   var self = this;
 
   var cdn = {cdn: self.config.cdns};
@@ -58,15 +60,15 @@ plugin.prototype.addScripts = function (req, res) {
   var menu_template = patterns.load('menu_item.hbs');
 
 
-  res.page('[data-menu]').each(function() {
+  res.dom('[data-menu]').each(function() {
 
-    var $menuContainer = res.page(this);
+    var $menuContainer = res.dom(this);
 
-    var $menu = res.page('<ul class="main-menu" template-path="{{ path }}"></ul>');
+    var $menu = res.dom('<ul class="main-menu" template-path="{{ path }}"></ul>');
 
     $menuContainer.append($menu);
 
-    var menuName = res.page(this).data('menu');
+    var menuName = res.dom(this).data('menu');
 
     console.log('config', this.config);
 
@@ -75,7 +77,7 @@ plugin.prototype.addScripts = function (req, res) {
     var items = [];
 
     for (var datum in menuData) {
-      items.push(res.page(menu_template(cdn, menuData[datum])));
+      items.push(res.dom(menu_template(cdn, menuData[datum])));
     }
 
     $menu.append(items);
@@ -86,7 +88,7 @@ plugin.prototype.addScripts = function (req, res) {
 
 plugin.prototype.req = function (req, res) {
 
-  res.page('head').append(this.scriptsTag(res.config.scripts.head));
-  res.page('body').append(this.scriptsTag(res.config.scripts.body));
+  res.dom('head').append(this.scriptsTag(res.config.scripts.head));
+  res.dom('body').append(this.scriptsTag(res.config.scripts.body));
 
 }

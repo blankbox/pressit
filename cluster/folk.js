@@ -63,8 +63,12 @@ var utils = {
   vent: vent
 };
 
-require('../app/scripts')(core, data, utils, config);
-require('../app/menus')(core, data, utils, config);
+var plugins = fs.readdirSync(__dirname + '/../app');
+for (plugin in plugins) {
+  require('../app/' + plugins[plugin])(core, data, utils, config);
+}
+
+console.log('plugins', plugins);
 
 vent.on('request config', function (name) {
   console.log('event:', name)
@@ -79,66 +83,159 @@ vent.on('template', function (name) {
 // rendered
 // complete
 
-app.get('*', function (req, res) {
+var init = function init (req, res, next) {
 
   var fullRequestObject = {req: req, res: res};
-
-  req.config = {};
-  vent.emit('request init', fullRequestObject);
-  if (typeof req.config._type === 'undefined') {
-    req.config._type = 'html';
-  }
-  vent.emit('request loaded', fullRequestObject);
-
 
   res.config = {
     scripts: {}
   };
 
-  vent.emit('response init', fullRequestObject);
-  vent.emit('response loaded', fullRequestObject);
+  var origin = (req.headers.origin ? req.headers.origin : req.headers.host).split(':');
+  req.pressit = {
+    _domain: origin[0],
+    _port: origin[1]
+  };
+  res.pressit = {
+    _type: 'html'
+  };
+  vent.emit('pressit init', fullRequestObject);
+  vent.emit('pressit loaded', fullRequestObject);
 
+  return next();
+
+}
+
+function parse_request (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  vent.emit('parse init', fullRequestObject);
+  vent.emit('parse done', fullRequestObject);
+
+  return next();
+
+}
+
+
+function template (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  res.pressit._tempate = __dirname + '/../project/core/templates/html/html-wrapper.html'
   vent.emit('template init', fullRequestObject);
-  if (typeof req.config.tempate === 'undefined') {
-    req.config.tempate = __dirname + '/../project/core/templates/html/html-wrapper.html'
-  }
   vent.emit('template set', fullRequestObject);
 
-  var main_template = cache.load(req.config.tempate);
+  return next();
+
+}
+
+function dom (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  vent.emit('template beforeload', fullRequestObject);
+  var main_template = cache.load(res.pressit._tempate);
   vent.emit('template loaded', fullRequestObject);
 
   vent.emit('page init', fullRequestObject);
-  res.page = $.load(main_template);
+  res.dom = $.load(main_template);
   vent.emit('page loaded', fullRequestObject);
 
+  return next();
+
+}
+
+function menus (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
 
   vent.emit('menu init', fullRequestObject);
   vent.emit('menu build', fullRequestObject);
   vent.emit('menu loaded', fullRequestObject);
 
 
-  vent.emit('widget init', fullRequestObject);
-  vent.emit('widget build', fullRequestObject);
-  vent.emit('widget loaded', fullRequestObject);
+  return next();
+
+}
+
+function dependancies (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
 
   vent.emit('dependancies init', fullRequestObject);
   vent.emit('dependancies scripts', fullRequestObject);
   vent.emit('dependancies scripts add', fullRequestObject);
   vent.emit('dependancies links', fullRequestObject);
 
-  vent.emit('meta init', fullRequestObject);
-  vent.emit('meta load', fullRequestObject);
+  return next();
+
+}
+
+function pre_compile (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  return next();
+
+}
+
+
+function compile (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  res.dom('[data-logo]').text(req.pressit._domain);
 
   vent.emit('response built', fullRequestObject);
 
-  res.type(req.config._type);
-  res.end(res.page.html());
+  vent.emit('widget init', fullRequestObject);
+  vent.emit('widget build', fullRequestObject);
+  vent.emit('widget loaded', fullRequestObject);
+
+  vent.emit('meta init', fullRequestObject);
+  vent.emit('meta load', fullRequestObject);
+
+  return next();
+
+}
+
+
+function response (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
+
+  vent.emit('response init', fullRequestObject);
+  vent.emit('response loaded', fullRequestObject);
+
+  res.type(res.pressit._type);
+  res.end(res.dom.html());
+
+  return next();
+
+}
+
+function post_response (req, res, next) {
+
+  var fullRequestObject = {req: req, res: res};
 
   vent.emit('response sent', fullRequestObject);
 
+}
 
-});
+var init_array = [init];
+init_array.push(parse_request);
 
+app.use(init_array);
+//app.use(parse_request);
+app.use(template);
+app.use(dom);
+app.use(menus);
+app.use(dependancies);
+app.use(pre_compile);
+app.use(compile);
+app.use(response);
+app.use(post_response);
 
 var port = process.env.TERRA_PORT;
 

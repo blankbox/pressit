@@ -7,7 +7,7 @@ function plugin (data, core, utils) {
 
 
 plugin.prototype.init = function () {
-  console.log('init happend in plugin');
+  console.log('init scripts plugin');
 
   var patterns = this.utils.handler(__dirname + '/patterns', {});
 
@@ -28,6 +28,8 @@ plugin.prototype.init = function () {
 }
 
 plugin.prototype.addScripts = function (req, res) {
+
+  console.log('addScripts froms scripts plugin')
 
   var scripts = [{
     id: 'jquery',
@@ -51,8 +53,8 @@ plugin.prototype.addScripts = function (req, res) {
 
 plugin.prototype.req = function (req, res) {
 
-  res.page('head').append(this.scriptsTag(res.config.scripts.head));
-  res.page('body').append(this.scriptsTag(res.config.scripts.body));
+  res.dom('head').append(this.scriptsTag(res.config.scripts.head));
+  res.dom('body').append(this.scriptsTag(res.config.scripts.body));
 
 }
 
